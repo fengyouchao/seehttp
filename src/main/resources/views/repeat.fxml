@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.fengyouchao.seehttp.controllers.RepeaterController">
+   <children>
+      <SplitPane dividerPositions="0.5075445816186557" layoutX="13.0" layoutY="57.0" prefHeight="561.0" prefWidth="772.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="57.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="sendButton" layoutX="15.0" layoutY="485.0" mnemonicParsing="false" onAction="#sendRequestAction" prefHeight="27.0" prefWidth="74.0" text="Send" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="15.0" />
+                  <TextArea fx:id="bodyTextArea" disable="true" editable="false" layoutX="15.0" layoutY="355.0" prefHeight="144.0" prefWidth="358.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="355.0" />
+                  <Label layoutX="15.0" layoutY="326.0" text="Body" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="326.0" />
+                  <Label layoutX="15.0" layoutY="54.0" text="Header" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="54.0" />
+                  <ChoiceBox fx:id="methodChoiceBox" layoutX="18.0" layoutY="14.0" prefHeight="27.0" prefWidth="101.0" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="14.0" />
+                  <TextField fx:id="hostTextField" layoutX="157.0" layoutY="14.0" prefHeight="27.0" prefWidth="124.0" promptText="IP or domain" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="14.0" />
+                  <Label layoutX="135.0" layoutY="19.0" prefHeight="17.0" prefWidth="22.0" text="IP:" AnchorPane.leftAnchor="135.0" AnchorPane.topAnchor="19.0" />
+                  <TextField fx:id="portTextField" layoutX="320.0" layoutY="14.0" prefHeight="27.0" prefWidth="54.0" text="80" />
+                  <Label layoutX="286.0" layoutY="19.0" text="Port:" />
+                  <TextField fx:id="pathTextField" layoutX="157.0" layoutY="49.0" prefHeight="27.0" prefWidth="216.0" promptText="Request Path" text="/" />
+                  <TextArea fx:id="headerTextArea" layoutX="15.0" layoutY="84.0" prefHeight="222.0" prefWidth="358.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="84.0" />
+                  <Label layoutX="118.0" layoutY="54.0" text="Path:" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="509.0" prefWidth="381.0">
+               <children>
+                  <TabPane layoutX="13.0" layoutY="5.0" prefHeight="508.0" prefWidth="331.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab text="Text">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextArea fx:id="responseTextTextArea" editable="false" layoutX="77.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Header">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextArea fx:id="responseHeaderTextArea" editable="false" layoutX="39.0" layoutY="70.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab text="Hex">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextArea fx:id="responseHexTextArea" editable="false" layoutX="105.0" layoutY="63.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <Label layoutX="19.0" layoutY="30.0" text="Request" AnchorPane.leftAnchor="19.0" AnchorPane.topAnchor="30.0">
+         <font>
+            <Font name="System Bold Italic" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="407.0" layoutY="30.0" text="Response" AnchorPane.rightAnchor="329.0" AnchorPane.topAnchor="30.0">
+         <font>
+            <Font name="System Bold Italic" size="13.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

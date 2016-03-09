@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.fengyouchao.seehttp.controllers.MainController">
+   <children>
+      <BorderPane layoutX="200.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <SplitPane dividerPositions="0.51171875" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="598.0">
+                     <children>
+                        <TableView fx:id="messageTable" layoutX="5.0" layoutY="24.0" prefHeight="204.0" prefWidth="850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                              <TableColumn fx:id="indexCol" prefWidth="63.0" text="序号" />
+                              <TableColumn fx:id="timeCol" prefWidth="95.0" text="时间" />
+                            <TableColumn fx:id="sourceCol" prefWidth="108.0" text="源IP" />
+                              <TableColumn fx:id="sourcePortCol" prefWidth="62.0" text="源端口" />
+                            <TableColumn fx:id="destinationCol" minWidth="0.0" prefWidth="126.0" text="目标IP" />
+                              <TableColumn fx:id="destinationPortCol" prefWidth="61.0" text="目标端口" />
+                              <TableColumn fx:id="domainCol" prefWidth="101.0" text="域名" />
+                              <TableColumn fx:id="methodCol" minWidth="0.0" prefWidth="77.0" text="请求方法" />
+                              <TableColumn fx:id="pathCol" prefWidth="87.0" text="路径" />
+                              <TableColumn fx:id="versionCol" prefWidth="72.0" text="版本" />
+                              <TableColumn fx:id="statusCodeCol" prefWidth="77.0" text="响应码" />
+                              <TableColumn fx:id="statusMessageCol" prefWidth="81.0" text="响应信息" />
+                              <TableColumn fx:id="infoCol" prefWidth="73.0" text="状态" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="183.0" prefWidth="598.0">
+                     <children>
+                        <TabPane layoutX="14.0" layoutY="35.0" prefHeight="304.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <tabs>
+                            <Tab text="Request">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TabPane layoutX="42.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <tabs>
+                                              <Tab text="Text">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="185.0" prefWidth="1023.0">
+                                                         <children>
+                                                            <TextArea fx:id="requestTextTextArea" layoutX="54.0" layoutY="-47.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children></AnchorPane>
+                                                </content>
+                                              </Tab>
+                                              <Tab text="Header">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextArea fx:id="requestHeaderTextArea" layoutX="109.0" layoutY="-47.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children></AnchorPane>
+                                                </content>
+                                              </Tab>
+                                                <Tab text="Hex">
+                                                  <content>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextArea fx:id="requestHexTextArea" layoutX="211.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children></AnchorPane>
+                                                  </content>
+                                                </Tab>
+                                            </tabs>
+                                          </TabPane>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="Response">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TabPane layoutX="105.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <tabs>
+                                              <Tab text="Text">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextArea fx:id="responseTextTextArea" layoutX="177.0" layoutY="-34.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children></AnchorPane>
+                                                </content>
+                                              </Tab>
+                                              <Tab text="Header">
+                                                <content>
+                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextArea fx:id="responseHeaderTextArea" layoutX="95.0" layoutY="-37.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children></AnchorPane>
+                                                </content>
+                                              </Tab>
+                                                <Tab text="Hex">
+                                                  <content>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                         <children>
+                                                            <SplitPane layoutX="202.0" layoutY="14.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                              <items>
+                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                                     <children>
+                                                                        <TextArea fx:id="responseHexTextArea" layoutX="129.0" layoutY="-48.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                              </items>
+                                                            </SplitPane>
+                                                         </children></AnchorPane>
+                                                  </content>
+                                                </Tab>
+                                            </tabs>
+                                          </TabPane>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children></AnchorPane>
+              </items>
+            </SplitPane>
+         </center>
+         <top>
+            <BorderPane prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <top>
+                  <MenuBar BorderPane.alignment="CENTER">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </top>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <TextField fx:id="portField" layoutX="446.0" layoutY="8.0" prefHeight="25.0" prefWidth="56.0" text="1080" AnchorPane.rightAnchor="98.0" />
+                        <Label layoutX="354.0" layoutY="13.0" prefHeight="15.0" prefWidth="92.0" text="SOCKS5代理:" AnchorPane.rightAnchor="154.0" />
+                        <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#clearAction" prefHeight="27.0" prefWidth="59.0" text="Clear" AnchorPane.leftAnchor="14.0" />
+                        <Button layoutX="88.0" layoutY="8.0" mnemonicParsing="false" onAction="#sendToRepeatView" text="Repeat" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="8.0" />
+                        <ToggleButton fx:id="proxyButton" layoutX="766.0" layoutY="8.0" mnemonicParsing="false" onAction="#startProxyAction" prefHeight="25.0" prefWidth="72.0" text="Start" AnchorPane.rightAnchor="14.0" />
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
