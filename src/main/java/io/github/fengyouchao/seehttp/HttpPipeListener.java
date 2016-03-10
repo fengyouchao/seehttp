@@ -6,6 +6,7 @@ import io.github.fengyouchao.httpparse.HttpParseException;
 import io.github.fengyouchao.httpparse.HttpRequest;
 import io.github.fengyouchao.httpparse.HttpResponse;
 import io.github.fengyouchao.seehttp.models.HttpMessageModel;
+import io.github.fengyouchao.seehttp.utils.PersistObjectUtils;
 import javafx.collections.ObservableList;
 import sockslib.server.io.Pipe;
 import sockslib.server.io.PipeListener;
@@ -92,6 +93,7 @@ public class HttpPipeListener implements PipeListener {
           httpMessageModel.setStatusMessage(((HttpResponse) httpMessage).getResponseReason());
           httpMessageModel.setHttpResponseObjectPath(dataPath);
           httpMessageModel.setIndex(++index);
+          httpMessageModel.setServer(httpMessage.getHeader("Server"));
           httpMessageModels.add(httpMessageModel);
         }
         httpMessageParse.reset();

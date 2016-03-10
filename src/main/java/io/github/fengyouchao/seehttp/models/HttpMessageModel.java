@@ -22,6 +22,7 @@ public class HttpMessageModel {
   private final StringProperty method = new SimpleStringProperty();
   private final StringProperty path = new SimpleStringProperty();
   private final StringProperty version = new SimpleStringProperty();
+  private final StringProperty server = new SimpleStringProperty();
   private final IntegerProperty statusCode = new SimpleIntegerProperty();
   private final StringProperty statusMessage = new SimpleStringProperty();
   private String httpRequestObjectPath;
@@ -189,5 +190,17 @@ public class HttpMessageModel {
 
   public void setDomain(String domain) {
     this.domain.set(domain);
+  }
+
+  public String getServer() {
+    return server.get();
+  }
+
+  public StringProperty serverProperty() {
+    return server;
+  }
+
+  public void setServer(String server) {
+    this.server.set(server);
   }
 }

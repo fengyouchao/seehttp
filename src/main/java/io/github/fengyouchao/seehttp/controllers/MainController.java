@@ -3,19 +3,21 @@ package io.github.fengyouchao.seehttp.controllers;
 import io.github.fengyouchao.httpparse.HttpRequest;
 import io.github.fengyouchao.httpparse.HttpResponse;
 import io.github.fengyouchao.seehttp.ApplicationManager;
-import io.github.fengyouchao.seehttp.HexUtils;
+import io.github.fengyouchao.seehttp.utils.HexUtils;
 import io.github.fengyouchao.seehttp.HttpPipeListener;
-import io.github.fengyouchao.seehttp.PersistObjectUtils;
+import io.github.fengyouchao.seehttp.utils.PersistObjectUtils;
 import io.github.fengyouchao.seehttp.models.HttpMessageModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sockslib.server.BasicSocksProxyServer;
 import sockslib.server.SocksProxyServer;
@@ -34,48 +36,29 @@ import java.util.concurrent.Executors;
  */
 public class MainController implements Initializable {
 
-  @FXML
-  private TextField portField;
-  @FXML
-  private ToggleButton proxyButton;
-  @FXML
-  private TableView<HttpMessageModel> messageTable;
-  @FXML
-  private TableColumn<HttpMessageModel, Integer> indexCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> timeCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> sourceCol;
-  @FXML
-  private TableColumn<HttpMessageModel, Integer> sourcePortCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> destinationCol;
-  @FXML
-  private TableColumn<HttpMessageModel, Integer> destinationPortCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> domainCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> methodCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> pathCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> versionCol;
-  @FXML
-  private TableColumn<HttpMessageModel, Integer> statusCodeCol;
-  @FXML
-  private TableColumn<HttpMessageModel, String> statusMessageCol;
-  @FXML
-  private TextArea requestTextTextArea;
-  @FXML
-  private TextArea requestHeaderTextArea;
-  @FXML
-  private TextArea requestHexTextArea;
-  @FXML
-  private TextArea responseTextTextArea;
-  @FXML
-  private TextArea responseHeaderTextArea;
-  @FXML
-  private TextArea responseHexTextArea;
+  @FXML private TextField portField;
+  @FXML private Button proxyButton;
+  @FXML private TableView<HttpMessageModel> messageTable;
+  //  @FXML
+  //  private TableColumn<HttpMessageModel, Integer> indexCol;
+  @FXML private TableColumn<HttpMessageModel, String> timeCol;
+  @FXML private TableColumn<HttpMessageModel, String> sourceCol;
+  @FXML private TableColumn<HttpMessageModel, Integer> sourcePortCol;
+  @FXML private TableColumn<HttpMessageModel, String> destinationCol;
+  @FXML private TableColumn<HttpMessageModel, Integer> destinationPortCol;
+  @FXML private TableColumn<HttpMessageModel, String> domainCol;
+  @FXML private TableColumn<HttpMessageModel, String> methodCol;
+  @FXML private TableColumn<HttpMessageModel, String> pathCol;
+  @FXML private TableColumn<HttpMessageModel, String> versionCol;
+  @FXML private TableColumn<HttpMessageModel, String> serverCol;
+  @FXML private TableColumn<HttpMessageModel, Integer> statusCodeCol;
+  @FXML private TableColumn<HttpMessageModel, String> statusMessageCol;
+  @FXML private TextArea requestTextTextArea;
+  @FXML private TextArea requestHeaderTextArea;
+  @FXML private TextArea requestHexTextArea;
+  @FXML private TextArea responseTextTextArea;
+  @FXML private TextArea responseHeaderTextArea;
+  @FXML private TextArea responseHexTextArea;
   private final ObservableList<HttpMessageModel> messageTableData =
       FXCollections.observableArrayList();
   private SocksProxyServer proxyServer;
@@ -100,10 +83,16 @@ public class MainController implements Initializable {
   }
 
 
-  public void startProxyAction() throws IOException {
-    int port = Integer.parseInt(portField.getText());
+  public void startProxyAction() {
     if (!proxyRunning) {
-      proxyButton.setText("正在启动");
+      int port = 1080;
+      try {
+        port = Integer.parseInt(portField.getText());
+      }catch (NumberFormatException e){
+        new Alert(Alert.AlertType.ERROR, "Port Range(1~65535)").show();
+        return;
+      }
+      proxyButton.setText("Starting");
       SocksServerBuilder builder =
           SocksServerBuilder.newSocks5ServerBuilder().setBindPort(port).setPipeInitializer(pipe -> {
             pipe.addPipeListener(new HttpPipeListener(messageTableData));
@@ -112,13 +101,19 @@ public class MainController implements Initializable {
       builder.setExecutorService(Executors.newFixedThreadPool(20));
       proxyServer = builder.build();
       proxyServer.setDaemon(true);
-      proxyServer.start();
-      proxyRunning = true;
-      proxyButton.setText("终止代理");
+      try {
+        proxyServer.start();
+        proxyRunning = true;
+        proxyButton.setText("Stop");
+      } catch (IOException e) {
+        proxyButton.setText("Start");
+        Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.CLOSE);
+        alert.show();
+      }
     } else {
-      proxyButton.setText("正在停止");
+      proxyButton.setText("Stopping");
       stopProxy();
-      proxyButton.setText("启动");
+      proxyButton.setText("Start");
     }
 
   }
@@ -136,7 +131,7 @@ public class MainController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
-    indexCol.setCellValueFactory(new PropertyValueFactory<>("index"));
+    //    indexCol.setCellValueFactory(new PropertyValueFactory<>("index"));
     timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
     sourceCol.setCellValueFactory(new PropertyValueFactory<>("source"));
     sourcePortCol.setCellValueFactory(new PropertyValueFactory<>("sourcePort"));
@@ -146,6 +141,7 @@ public class MainController implements Initializable {
     methodCol.setCellValueFactory(new PropertyValueFactory<>("method"));
     pathCol.setCellValueFactory(new PropertyValueFactory<>("path"));
     versionCol.setCellValueFactory(new PropertyValueFactory<>("version"));
+    serverCol.setCellValueFactory(new PropertyValueFactory<>("server"));
     statusCodeCol.setCellValueFactory(new PropertyValueFactory<>("statusCode"));
     statusMessageCol.setCellValueFactory(new PropertyValueFactory<>("statusMessage"));
     messageTable.setItems(messageTableData);

@@ -1,26 +1,26 @@
 package io.github.fengyouchao.seehttp.controllers;
 
 import io.github.fengyouchao.httpparse.HttpMethod;
-import io.github.fengyouchao.httpparse.HttpParseException;
 import io.github.fengyouchao.httpparse.HttpRequest;
 import io.github.fengyouchao.httpparse.HttpRequestBuilder;
-import io.github.fengyouchao.httpparse.HttpResponse;
 import io.github.fengyouchao.seehttp.ApplicationManager;
-import io.github.fengyouchao.seehttp.HexUtils;
-import io.github.fengyouchao.seehttp.PersistObjectUtils;
+import io.github.fengyouchao.seehttp.utils.PersistObjectUtils;
 import io.github.fengyouchao.seehttp.models.HttpMessageModel;
-import io.github.fengyouchao.seehttp.utils.HttpClient;
+import io.github.fengyouchao.seehttp.services.SendHttpRequestService;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,43 +35,52 @@ public class RepeaterController implements Initializable {
 
   private static final Logger logger = LoggerFactory.getLogger(RepeaterController.class);
 
-  @FXML
-  private ChoiceBox<String> methodChoiceBox;
+  @FXML private ChoiceBox<String> methodChoiceBox;
 
-  @FXML
-  private Button sendButton;
-  @FXML
-  private TextArea bodyTextArea;
+  @FXML private Button sendButton;
+  @FXML private TextArea bodyTextArea;
 
-  @FXML
-  private TextArea headerTextArea;
+  @FXML private TextArea headerTextArea;
 
-  @FXML
-  private TextField hostTextField;
+  @FXML private TextField hostTextField;
 
-  @FXML
-  private TextField pathTextField;
+  @FXML private TextField pathTextField;
 
-  @FXML
-  TextField portTextField;
+  @FXML private TextField portTextField;
 
 
-  @FXML
-  private TextArea responseTextTextArea;
-  @FXML
-  private TextArea responseHeaderTextArea;
-  @FXML
-  private TextArea responseHexTextArea;
+  @FXML private Region veilRegion;
+
+  @FXML private ProgressIndicator progressIndicator;
+
+
+  @FXML private TextArea responseTextTextArea;
+  @FXML private TextArea responseHeaderTextArea;
+  @FXML private TextArea responseHexTextArea;
+
+  private SendHttpRequestService sendHttpRequestService = new SendHttpRequestService();
 
   public void sendRequestAction() {
-    sendButton.setText("Sending");
-    responseTextTextArea.setText("");
     HttpMethod method = HttpMethod.valueOf(methodChoiceBox.getValue());
     String host = hostTextField.getText().trim();
-    int port = Integer.parseInt(portTextField.getText().trim());
+    int port = 80;
+    try {
+      port = Integer.parseInt(portTextField.getText().trim());
+    } catch (NumberFormatException e) {
+      new Alert(Alert.AlertType.ERROR, "Port Range(1~65535)").show();
+      return;
+    }
     String path = pathTextField.getText();
     String body = bodyTextArea.getText();
     String headers = headerTextArea.getText();
+    if (host.equals("")) {
+      new Alert(Alert.AlertType.ERROR, "IP can't be empty").show();
+      return;
+    }
+    if (path.equals("")){
+      new Alert(Alert.AlertType.ERROR, "Path can't be empty").show();
+      return;
+    }
     HttpRequestBuilder builder = new HttpRequestBuilder().setMethod(method).setPath(path);
     for (String header : headers.split("\n")) {
       if (!header.equals("")) {
@@ -79,7 +88,9 @@ public class RepeaterController implements Initializable {
         if (nameValue.length == 2) {
           builder.setHeader(nameValue[0], nameValue[1]);
         } else {
+          new Alert(Alert.AlertType.ERROR, "Error Header:" + header).show();
           logger.error("wrong header:" + header);
+          return;
         }
       }
     }
@@ -87,39 +98,51 @@ public class RepeaterController implements Initializable {
       builder.setBody(body.getBytes());
     }
     HttpRequest httpRequest = builder.build();
-    try {
-      HttpResponse httpResponse = HttpClient.request(httpRequest, host, port);
-      responseTextTextArea.setText(httpResponse.toString());
-      responseHeaderTextArea.setText(httpResponse.headerString());
-      responseHexTextArea.setText(HexUtils.hexString(httpResponse.getBody()));
-    } catch (IOException | HttpParseException e) {
-      e.printStackTrace();
+    sendHttpRequestService.setHttpRequest(httpRequest);
+    sendHttpRequestService.setHost(host);
+    sendHttpRequestService.setPort(port);
+    if (sendHttpRequestService.getState() == Worker.State.READY) {
+      sendHttpRequestService.start();
+    } else if (sendHttpRequestService.getState() == Worker.State.SUCCEEDED) {
+      sendHttpRequestService.restart();
     }
-    sendButton.setText("Send");
+    //      responseTextTextArea.setText(httpResponse.toString());
+    //      responseHeaderTextArea.setText(httpResponse.headerString());
+    //      responseHexTextArea.setText(HexUtils.hexString(httpResponse.getBody()));
   }
 
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    methodChoiceBox.setItems(FXCollections.observableArrayList("GET", "POST", "PUT", "PATCH",
-        "DELETE", "HEAD", "OPTIONS"));
+    veilRegion.setVisible(false);
+    progressIndicator.setVisible(false);
+    progressIndicator.visibleProperty().bind(sendHttpRequestService.runningProperty());
+    veilRegion.visibleProperty().bind(sendHttpRequestService.runningProperty());
+    responseTextTextArea.textProperty().bind(sendHttpRequestService.valueProperty());
+    responseHeaderTextArea.textProperty().bind(sendHttpRequestService.headerValueProperty());
+    responseHexTextArea.textProperty().bind(sendHttpRequestService.bodyHexProperty());
+    sendButton.textProperty().bind(sendHttpRequestService.buttonTextProperty());
+    sendButton.disableProperty().bind(sendHttpRequestService.runningProperty());
+    methodChoiceBox.setItems(FXCollections
+        .observableArrayList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
     methodChoiceBox.setValue("GET");
-    methodChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue,
-        newValue) -> {
-      if (newValue.equals("GET") || newValue.equals("HEAD")) {
-        bodyTextArea.setEditable(false);
-        bodyTextArea.setDisable(true);
-      } else {
-        bodyTextArea.setEditable(true);
-        bodyTextArea.setDisable(false);
-      }
-    });
+    methodChoiceBox.getSelectionModel().selectedItemProperty()
+        .addListener((observable, oldValue, newValue) -> {
+          if (newValue.equals("GET") || newValue.equals("HEAD")) {
+            bodyTextArea.setEditable(false);
+            bodyTextArea.setDisable(true);
+          } else {
+            bodyTextArea.setEditable(true);
+            bodyTextArea.setDisable(false);
+          }
+        });
     HttpMessageModel httpMessageModel = ApplicationManager.getSelectedHttpMessageModel();
-    if(httpMessageModel != null){
+    if (httpMessageModel != null) {
       hostTextField.setText(httpMessageModel.getDestination());
       portTextField.setText(String.valueOf(httpMessageModel.getDestinationPort()));
       pathTextField.setText(httpMessageModel.getPath());
-      HttpRequest request = PersistObjectUtils.read(httpMessageModel.getHttpRequestObjectPath(), HttpRequest.class);
+      HttpRequest request =
+          PersistObjectUtils.read(httpMessageModel.getHttpRequestObjectPath(), HttpRequest.class);
       methodChoiceBox.setValue(request.getMethod().toString());
       headerTextArea.setText(request.headerString());
       bodyTextArea.setText(request.getText());

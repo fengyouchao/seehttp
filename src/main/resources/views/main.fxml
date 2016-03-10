@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.fengyouchao.seehttp.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="655.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.fengyouchao.seehttp.controllers.MainController">
    <children>
       <BorderPane layoutX="200.0" layoutY="93.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -13,18 +13,18 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="598.0">
                      <children>
-                        <TableView fx:id="messageTable" layoutX="5.0" layoutY="24.0" prefHeight="204.0" prefWidth="850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="messageTable" layoutX="5.0" layoutY="24.0" prefHeight="204.0" prefWidth="850.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                              <TableColumn fx:id="indexCol" prefWidth="63.0" text="序号" />
-                              <TableColumn fx:id="timeCol" prefWidth="95.0" text="时间" />
-                            <TableColumn fx:id="sourceCol" prefWidth="108.0" text="源IP" />
-                              <TableColumn fx:id="sourcePortCol" prefWidth="62.0" text="源端口" />
+                              <TableColumn fx:id="timeCol" prefWidth="91.0" text="时间" />
+                            <TableColumn fx:id="sourceCol" prefWidth="98.0" text="源IP" />
+                              <TableColumn fx:id="sourcePortCol" prefWidth="76.0" text="源端口" />
                             <TableColumn fx:id="destinationCol" minWidth="0.0" prefWidth="126.0" text="目标IP" />
                               <TableColumn fx:id="destinationPortCol" prefWidth="61.0" text="目标端口" />
                               <TableColumn fx:id="domainCol" prefWidth="101.0" text="域名" />
                               <TableColumn fx:id="methodCol" minWidth="0.0" prefWidth="77.0" text="请求方法" />
                               <TableColumn fx:id="pathCol" prefWidth="87.0" text="路径" />
                               <TableColumn fx:id="versionCol" prefWidth="72.0" text="版本" />
+                              <TableColumn fx:id="serverCol" prefWidth="75.0" text="服务器" />
                               <TableColumn fx:id="statusCodeCol" prefWidth="77.0" text="响应码" />
                               <TableColumn fx:id="statusMessageCol" prefWidth="81.0" text="响应信息" />
                               <TableColumn fx:id="infoCol" prefWidth="73.0" text="状态" />
@@ -123,7 +123,7 @@
             </SplitPane>
          </center>
          <top>
-            <BorderPane prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <BorderPane minWidth="500.0" prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <top>
                   <MenuBar BorderPane.alignment="CENTER">
                     <menus>
@@ -142,7 +142,7 @@
                         <Label layoutX="354.0" layoutY="13.0" prefHeight="15.0" prefWidth="92.0" text="SOCKS5代理:" AnchorPane.rightAnchor="154.0" />
                         <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#clearAction" prefHeight="27.0" prefWidth="59.0" text="Clear" AnchorPane.leftAnchor="14.0" />
                         <Button layoutX="88.0" layoutY="8.0" mnemonicParsing="false" onAction="#sendToRepeatView" text="Repeat" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="8.0" />
-                        <ToggleButton fx:id="proxyButton" layoutX="766.0" layoutY="8.0" mnemonicParsing="false" onAction="#startProxyAction" prefHeight="25.0" prefWidth="72.0" text="Start" AnchorPane.rightAnchor="14.0" />
+                        <Button fx:id="proxyButton" layoutX="949.0" layoutY="9.0" mnemonicParsing="false" onAction="#startProxyAction" prefHeight="25.0" prefWidth="70.0" text="Start" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0" />
                      </children>
                   </AnchorPane>
                </center>

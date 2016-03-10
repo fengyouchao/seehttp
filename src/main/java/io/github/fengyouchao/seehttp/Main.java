@@ -38,7 +38,6 @@ public class Main extends Application {
 
   private Stage mainStage;              //登录界面和主界面的Stage。
   private Stage modalStage;              //模式窗口的Stage
-  //	private MainController mainController;				//主界面的控制器。
   private MainController mainController;
 
   @Override
@@ -63,8 +62,8 @@ public class Main extends Application {
 
   @Override
   public void stop() throws Exception {
+    System.exit(0);
     super.stop();
-    mainController.stopProxy();
   }
 
   /**
@@ -76,6 +75,8 @@ public class Main extends Application {
       MainController mainController = (MainController) replaceSceneContent("/views/main.fxml");
       this.mainController = mainController;
       mainStage.setResizable(true);
+      mainStage.setMinWidth(500);
+      mainStage.setMinHeight(300);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
