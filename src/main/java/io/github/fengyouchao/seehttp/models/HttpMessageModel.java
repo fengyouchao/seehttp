@@ -13,6 +13,7 @@ import javafx.beans.property.StringProperty;
 public class HttpMessageModel {
 
   private final IntegerProperty index = new SimpleIntegerProperty();
+  private final StringProperty status = new SimpleStringProperty();
   private final StringProperty time = new SimpleStringProperty();
   private final StringProperty source = new SimpleStringProperty();
   private final IntegerProperty sourcePort = new SimpleIntegerProperty();
@@ -23,7 +24,8 @@ public class HttpMessageModel {
   private final StringProperty path = new SimpleStringProperty();
   private final StringProperty version = new SimpleStringProperty();
   private final StringProperty server = new SimpleStringProperty();
-  private final IntegerProperty statusCode = new SimpleIntegerProperty();
+  private final StringProperty title = new SimpleStringProperty();
+  private final StringProperty statusCode = new SimpleStringProperty();
   private final StringProperty statusMessage = new SimpleStringProperty();
   private String httpRequestObjectPath;
   private String httpResponseObjectPath;
@@ -31,29 +33,28 @@ public class HttpMessageModel {
   public HttpMessageModel() {
   }
 
-
-  public String getDestination() {
-    return destination.get();
+  public int getIndex() {
+    return index.get();
   }
 
-  public StringProperty destinationProperty() {
-    return destination;
+  public IntegerProperty indexProperty() {
+    return index;
   }
 
-  public void setDestination(String destination) {
-    this.destination.set(destination);
+  public void setIndex(int index) {
+    this.index.set(index);
   }
 
-  public String getSource() {
-    return source.get();
+  public String getStatus() {
+    return status.get();
   }
 
-  public StringProperty sourceProperty() {
-    return source;
+  public StringProperty statusProperty() {
+    return status;
   }
 
-  public void setSource(String source) {
-    this.source.set(source);
+  public void setStatus(String status) {
+    this.status.set(status);
   }
 
   public String getTime() {
@@ -68,16 +69,68 @@ public class HttpMessageModel {
     this.time.set(time);
   }
 
-  public int getIndex() {
-    return index.get();
+  public String getSource() {
+    return source.get();
   }
 
-  public IntegerProperty indexProperty() {
-    return index;
+  public StringProperty sourceProperty() {
+    return source;
   }
 
-  public void setIndex(int index) {
-    this.index.set(index);
+  public void setSource(String source) {
+    this.source.set(source);
+  }
+
+  public int getSourcePort() {
+    return sourcePort.get();
+  }
+
+  public IntegerProperty sourcePortProperty() {
+    return sourcePort;
+  }
+
+  public void setSourcePort(int sourcePort) {
+    this.sourcePort.set(sourcePort);
+  }
+
+  public void setStatusCode(String statusCode) {
+    this.statusCode.set(statusCode);
+  }
+
+  public String getDestination() {
+    return destination.get();
+  }
+
+  public StringProperty destinationProperty() {
+    return destination;
+  }
+
+  public void setDestination(String destination) {
+    this.destination.set(destination);
+  }
+
+  public int getDestinationPort() {
+    return destinationPort.get();
+  }
+
+  public IntegerProperty destinationPortProperty() {
+    return destinationPort;
+  }
+
+  public void setDestinationPort(int destinationPort) {
+    this.destinationPort.set(destinationPort);
+  }
+
+  public String getDomain() {
+    return domain.get();
+  }
+
+  public StringProperty domainProperty() {
+    return domain;
+  }
+
+  public void setDomain(String domain) {
+    this.domain.set(domain);
   }
 
   public String getMethod() {
@@ -104,16 +157,40 @@ public class HttpMessageModel {
     this.path.set(path);
   }
 
-  public int getStatusCode() {
+  public String getVersion() {
+    return version.get();
+  }
+
+  public StringProperty versionProperty() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version.set(version);
+  }
+
+  public String getServer() {
+    return server.get();
+  }
+
+  public StringProperty serverProperty() {
+    return server;
+  }
+
+  public void setServer(String server) {
+    this.server.set(server);
+  }
+
+  public String getStatusCode() {
     return statusCode.get();
   }
 
-  public IntegerProperty statusCodeProperty() {
+  public StringProperty statusCodeProperty() {
     return statusCode;
   }
 
   public void setStatusCode(int statusCode) {
-    this.statusCode.set(statusCode);
+    this.statusCode.set(String.valueOf(statusCode));
   }
 
   public String getStatusMessage() {
@@ -144,63 +221,15 @@ public class HttpMessageModel {
     this.httpResponseObjectPath = httpResponseObjectPath;
   }
 
-  public String getVersion() {
-    return version.get();
+  public String getTitle() {
+    return title.get();
   }
 
-  public StringProperty versionProperty() {
-    return version;
+  public StringProperty titleProperty() {
+    return title;
   }
 
-  public void setVersion(String version) {
-    this.version.set(version);
-  }
-
-  public int getSourcePort() {
-    return sourcePort.get();
-  }
-
-  public IntegerProperty sourcePortProperty() {
-    return sourcePort;
-  }
-
-  public void setSourcePort(int sourcePort) {
-    this.sourcePort.set(sourcePort);
-  }
-
-  public int getDestinationPort() {
-    return destinationPort.get();
-  }
-
-  public IntegerProperty destinationPortProperty() {
-    return destinationPort;
-  }
-
-  public void setDestinationPort(int destinationPort) {
-    this.destinationPort.set(destinationPort);
-  }
-
-  public String getDomain() {
-    return domain.get();
-  }
-
-  public StringProperty domainProperty() {
-    return domain;
-  }
-
-  public void setDomain(String domain) {
-    this.domain.set(domain);
-  }
-
-  public String getServer() {
-    return server.get();
-  }
-
-  public StringProperty serverProperty() {
-    return server;
-  }
-
-  public void setServer(String server) {
-    this.server.set(server);
+  public void setTitle(String title) {
+    this.title.set(title);
   }
 }

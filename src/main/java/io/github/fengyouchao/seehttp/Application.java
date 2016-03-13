@@ -8,7 +8,7 @@ package io.github.fengyouchao.seehttp;
 
 
 import io.github.fengyouchao.seehttp.controllers.MainController;
-import javafx.application.Application;
+import io.github.fengyouchao.seehttp.utils.ConfigurationUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * <code>Main</code>类是整个系统的启动类，它控制着系统各个界面
+ * <code>Application</code>类是整个系统的启动类，它控制着系统各个界面
  * 的跳转。
  *
  * @author fengyouchao
@@ -32,9 +32,9 @@ import java.io.InputStream;
  * @see MainController
  * @since JDK8
  */
-public class Main extends Application {
+public class Application extends javafx.application.Application {
 
-  private final static Logger log = LoggerFactory.getLogger(Main.class);
+  private final static Logger log = LoggerFactory.getLogger(Application.class);
 
   private Stage mainStage;              //登录界面和主界面的Stage。
   private Stage modalStage;              //模式窗口的Stage
@@ -43,7 +43,6 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     init(stage);
-    stage.show();
   }
 
 
@@ -53,10 +52,12 @@ public class Main extends Application {
    * @param stage 来自start方法中的Stage
    */
   private void init(Stage stage) {
+    ConfigurationUtils.init();
+    ApplicationManager.setApplication(this);
     this.mainStage = stage;
     lanuchMainView();
     stage.setTitle("SeeHTTP");
-    ApplicationManager.setApplication(this);
+    stage.show();
   }
 
 
@@ -82,53 +83,17 @@ public class Main extends Application {
     }
   }
 
-
-
-  //    public void showUpdateFurnitureView(Furniture furniture){
-  //        ApplicationManager.getSession().put(Session.UPDATE_FURNITURE, furniture);
-  //        showView(FXMLResourceManager.UPDATE_FURNITURE_FXML_PATH);
-  //        modalStage.setTitle("修改商品");
-  //        modalStage.setResizable(false);
-  //    }
-
-  //    public void showCreateUserView(){
-  //        showView(FXMLResourceManager.CREATE_USER_FXML_PATH);
-  //        modalStage.setTitle("创建用户");
-  //        modalStage.setResizable(false);
-  //    }
-  //
-  //    public  void showOrderDetailView(){
-  //        showView(FXMLResourceManager.ORDER_DETAIL_FXML_PATH);
-  //        modalStage.setTitle("订单详情");
-  //        modalStage.setResizable(false);
-  //    }
-  //
-  //    public void showFeedbackDetailView(){
-  //        showView(FXMLResourceManager.FEEDBACK_DETAIL_FXML_PATH);
-  //        modalStage.setTitle("反馈详情");
-  //        modalStage.setResizable(true);
-  //    }
-  //
-  //    public void showUpdateUserView(){
-  //        showView(FXMLResourceManager.UPDATE_USERL_FXML_PATH);
-  //        modalStage.setTitle("更新用户信息");
-  //        modalStage.setResizable(false);
-  //    }
-
   public void showRepeater(){
     showView("/views/repeat.fxml");
     modalStage.setTitle("Repeater");
   }
-
-
-
 
   /**
    * 显示一个模式窗口。
    *
    * @param fxmlPath 需要显示的界面的fxml文件路径。
    */
-  private void showView(String fxmlPath) {
+  private void showModalView(String fxmlPath) {
     final Stage stage = new Stage();
     this.modalStage = stage;
     Parent root = null;
@@ -144,6 +109,20 @@ public class Main extends Application {
     stage.show();
   }
 
+  private void showView(String fxmlPath){
+    final Stage stage = new Stage();
+    this.modalStage = stage;
+    Parent root = null;
+    try {
+      root = FXMLLoader.load(getClass().getResource(fxmlPath));
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    }
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
   /**
    * 替换布景的内容。
    *
@@ -153,9 +132,9 @@ public class Main extends Application {
    */
   private Initializable replaceSceneContent(String fxml) throws Exception {
     FXMLLoader loader = new FXMLLoader();
-    InputStream in = Main.class.getResourceAsStream(fxml);
+    InputStream in = Application.class.getResourceAsStream(fxml);
     loader.setBuilderFactory(new JavaFXBuilderFactory());
-    loader.setLocation(Main.class.getResource(fxml));
+    loader.setLocation(Application.class.getResource(fxml));
     //		loader.setResources(ResourceBundle.getBundle(Constant.LANGUAGE_PACKAGE_NAME));
     AnchorPane page;
     try {
@@ -174,9 +153,9 @@ public class Main extends Application {
 
   private Initializable changeView(String fxml) throws Exception {
     FXMLLoader loader = new FXMLLoader();
-    InputStream in = Main.class.getResourceAsStream(fxml);
+    InputStream in = Application.class.getResourceAsStream(fxml);
     loader.setBuilderFactory(new JavaFXBuilderFactory());
-    loader.setLocation(Main.class.getResource(fxml));
+    loader.setLocation(Application.class.getResource(fxml));
     //		loader.setResources(ResourceBundle.getBundle(Constant.LANGUAGE_PACKAGE_NAME));
     AnchorPane page;
     try {
@@ -209,9 +188,9 @@ public class Main extends Application {
    *
    * @return 主界面控制器。
    */
-  //	public MainController getMainController() {
-  //		return mainController;
-  //	}
+  public MainController getMainController() {
+    return mainController;
+  }
 
   /**
    * 获得模式窗口的Stage。
@@ -220,10 +199,6 @@ public class Main extends Application {
    */
   public Stage getModalStage() {
     return modalStage;
-  }
-
-  public MainController getMainController() {
-    return mainController;
   }
 
   public void setMainController(MainController mainController) {
@@ -244,4 +219,7 @@ public class Main extends Application {
 
 
 
+  public void showBrowser() {
+    showView("/views/browser.fxml");
+  }
 }

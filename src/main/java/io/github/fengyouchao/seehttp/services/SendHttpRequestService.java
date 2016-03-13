@@ -19,6 +19,7 @@ public class SendHttpRequestService extends Service<String> {
   private StringProperty headerValue = new SimpleStringProperty();
   private StringProperty bodyHex = new SimpleStringProperty();
   private StringProperty buttonText = new SimpleStringProperty("Send");
+  private StringProperty responseTimeText = new SimpleStringProperty();
 
   @Override
   protected Task<String> createTask() {
@@ -29,6 +30,8 @@ public class SendHttpRequestService extends Service<String> {
     bodyHex.bind(task.bodyHexProperty());
     buttonText.unbind();
     buttonText.bind(task.buttonTextProperty());
+    responseTimeText.unbind();
+    responseTimeText.bind(task.responseTimeTextProperty());
     return task;
 
   }
@@ -91,5 +94,17 @@ public class SendHttpRequestService extends Service<String> {
 
   public void setButtonText(String buttonText) {
     this.buttonText.set(buttonText);
+  }
+
+  public String getResponseTimeText() {
+    return responseTimeText.get();
+  }
+
+  public StringProperty responseTimeTextProperty() {
+    return responseTimeText;
+  }
+
+  public void setResponseTimeText(String responseTimeText) {
+    this.responseTimeText.set(responseTimeText);
   }
 }

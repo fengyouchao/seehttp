@@ -4,9 +4,9 @@ import io.github.fengyouchao.httpparse.HttpMethod;
 import io.github.fengyouchao.httpparse.HttpRequest;
 import io.github.fengyouchao.httpparse.HttpRequestBuilder;
 import io.github.fengyouchao.seehttp.ApplicationManager;
-import io.github.fengyouchao.seehttp.utils.PersistObjectUtils;
 import io.github.fengyouchao.seehttp.models.HttpMessageModel;
 import io.github.fengyouchao.seehttp.services.SendHttpRequestService;
+import io.github.fengyouchao.seehttp.utils.PersistObjectUtils;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -35,28 +36,42 @@ public class RepeaterController implements Initializable {
 
   private static final Logger logger = LoggerFactory.getLogger(RepeaterController.class);
 
-  @FXML private ChoiceBox<String> methodChoiceBox;
+  @FXML
+  private ChoiceBox<String> methodChoiceBox;
 
-  @FXML private Button sendButton;
-  @FXML private TextArea bodyTextArea;
+  @FXML
+  private Button sendButton;
+  @FXML
+  private TextArea bodyTextArea;
 
-  @FXML private TextArea headerTextArea;
+  @FXML
+  private TextArea headerTextArea;
 
-  @FXML private TextField hostTextField;
+  @FXML
+  private TextField hostTextField;
 
-  @FXML private TextField pathTextField;
+  @FXML
+  private TextField pathTextField;
 
-  @FXML private TextField portTextField;
-
-
-  @FXML private Region veilRegion;
-
-  @FXML private ProgressIndicator progressIndicator;
+  @FXML
+  private TextField portTextField;
 
 
-  @FXML private TextArea responseTextTextArea;
-  @FXML private TextArea responseHeaderTextArea;
-  @FXML private TextArea responseHexTextArea;
+  @FXML
+  private Region veilRegion;
+
+  @FXML
+  private ProgressIndicator progressIndicator;
+
+
+  @FXML
+  private TextArea responseTextTextArea;
+  @FXML
+  private TextArea responseHeaderTextArea;
+  @FXML
+  private TextArea responseHexTextArea;
+  @FXML
+  Label responseTimeLabel;
 
   private SendHttpRequestService sendHttpRequestService = new SendHttpRequestService();
 
@@ -77,7 +92,7 @@ public class RepeaterController implements Initializable {
       new Alert(Alert.AlertType.ERROR, "IP can't be empty").show();
       return;
     }
-    if (path.equals("")){
+    if (path.equals("")) {
       new Alert(Alert.AlertType.ERROR, "Path can't be empty").show();
       return;
     }
@@ -106,9 +121,6 @@ public class RepeaterController implements Initializable {
     } else if (sendHttpRequestService.getState() == Worker.State.SUCCEEDED) {
       sendHttpRequestService.restart();
     }
-    //      responseTextTextArea.setText(httpResponse.toString());
-    //      responseHeaderTextArea.setText(httpResponse.headerString());
-    //      responseHexTextArea.setText(HexUtils.hexString(httpResponse.getBody()));
   }
 
 
@@ -123,19 +135,20 @@ public class RepeaterController implements Initializable {
     responseHexTextArea.textProperty().bind(sendHttpRequestService.bodyHexProperty());
     sendButton.textProperty().bind(sendHttpRequestService.buttonTextProperty());
     sendButton.disableProperty().bind(sendHttpRequestService.runningProperty());
-    methodChoiceBox.setItems(FXCollections
-        .observableArrayList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
+    responseTimeLabel.textProperty().bind(sendHttpRequestService.responseTimeTextProperty());
+    methodChoiceBox.setItems(FXCollections.observableArrayList("GET", "POST", "PUT", "PATCH",
+        "DELETE", "HEAD", "OPTIONS"));
     methodChoiceBox.setValue("GET");
-    methodChoiceBox.getSelectionModel().selectedItemProperty()
-        .addListener((observable, oldValue, newValue) -> {
-          if (newValue.equals("GET") || newValue.equals("HEAD")) {
-            bodyTextArea.setEditable(false);
-            bodyTextArea.setDisable(true);
-          } else {
-            bodyTextArea.setEditable(true);
-            bodyTextArea.setDisable(false);
-          }
-        });
+    methodChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue,
+        newValue) -> {
+      if (newValue.equals("GET") || newValue.equals("HEAD")) {
+        bodyTextArea.setEditable(false);
+        bodyTextArea.setDisable(true);
+      } else {
+        bodyTextArea.setEditable(true);
+        bodyTextArea.setDisable(false);
+      }
+    });
     HttpMessageModel httpMessageModel = ApplicationManager.getSelectedHttpMessageModel();
     if (httpMessageModel != null) {
       hostTextField.setText(httpMessageModel.getDestination());

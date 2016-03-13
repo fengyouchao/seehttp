@@ -11,14 +11,14 @@ import io.github.fengyouchao.seehttp.models.HttpMessageModel;
  */
 public class ApplicationManager {
 
-  private static Main application;
+  private static Application application;
   private static HttpMessageModel selectedHttpMessageModel;
 
-  public static void setApplication(Main main){
+  public static void setApplication(Application main) {
     application = main;
   }
 
-  public static Main getApplication() {
+  public static Application getApplication() {
     return application;
   }
 

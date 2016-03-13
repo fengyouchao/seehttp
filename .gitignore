@@ -10,3 +10,6 @@ target/
 .idea/
 *.iml
 temp
+data
+conf
+plugins

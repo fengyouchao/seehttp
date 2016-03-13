@@ -4,6 +4,7 @@ import io.github.fengyouchao.httpparse.HttpRequest;
 import io.github.fengyouchao.httpparse.HttpResponse;
 import io.github.fengyouchao.seehttp.utils.HexUtils;
 import io.github.fengyouchao.seehttp.utils.HttpClient;
+import io.github.fengyouchao.seehttp.utils.RequestResult;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,6 +24,7 @@ public class SendHttpRequestTask extends Task<String> {
   private StringProperty headerValue = new SimpleStringProperty();
   private StringProperty bodyHex = new SimpleStringProperty();
   private StringProperty buttonText = new SimpleStringProperty("Send");
+  private StringProperty responseTimeText = new SimpleStringProperty();
 
   public SendHttpRequestTask(HttpRequest httpRequest, String host, int port) {
     this.httpRequest = httpRequest;
@@ -34,7 +36,9 @@ public class SendHttpRequestTask extends Task<String> {
   protected String call() throws Exception {
     Platform.runLater(() -> buttonText.set("Sending"));
     try {
-      HttpResponse httpResponse = HttpClient.request(httpRequest, host, port);
+      RequestResult result = HttpClient.request(httpRequest, host, port);
+      HttpResponse httpResponse = result.getResponse();
+      Platform.runLater(() -> responseTimeText.set(result.getResponseTime() + "ms"));
       Platform.runLater(() -> buttonText.set("Send"));
       Platform.runLater(() -> headerValue.set(httpResponse.headerString()));
       Platform.runLater(() -> bodyHex.set(HexUtils.hexString(httpResponse.getBody())));
@@ -106,5 +110,17 @@ public class SendHttpRequestTask extends Task<String> {
 
   public void setButtonText(String buttonText) {
     this.buttonText.set(buttonText);
+  }
+
+  public String getResponseTimeText() {
+    return responseTimeText.get();
+  }
+
+  public StringProperty responseTimeTextProperty() {
+    return responseTimeText;
+  }
+
+  public void setResponseTimeText(String responseTimeText) {
+    this.responseTimeText.set(responseTimeText);
   }
 }

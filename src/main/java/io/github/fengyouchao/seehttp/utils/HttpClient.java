@@ -20,7 +20,9 @@ import java.net.Socket;
  */
 public class HttpClient {
 
-  public static HttpResponse request(HttpRequest httpRequest, String host, int port) throws IOException, HttpParseException {
+  public static RequestResult request(HttpRequest httpRequest, String host, int port) throws
+      IOException, HttpParseException {
+    long startTime = System.currentTimeMillis();
     HttpMessageParser httpMessageParser = new HttpMessageParser();
     Socket socket = new Socket();
     socket.connect(new InetSocketAddress(host, port));
@@ -36,6 +38,9 @@ public class HttpClient {
         break;
       }
     }
-    return (HttpResponse) httpMessageParser.getHttpMessage();
+    HttpResponse response = (HttpResponse) httpMessageParser.getHttpMessage();
+    return new RequestResult(response, System.currentTimeMillis() - startTime);
   }
+
+
 }

@@ -46,7 +46,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.fengyouchao.seehttp.Main</mainClass>
+                            <mainClass>io.github.fengyouchao.seehttp.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
