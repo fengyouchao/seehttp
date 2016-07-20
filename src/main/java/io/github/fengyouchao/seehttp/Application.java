@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -55,6 +56,7 @@ public class Application extends javafx.application.Application {
     ConfigurationUtils.init();
     ApplicationManager.setApplication(this);
     this.mainStage = stage;
+    stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/views/icon.png")));
     lanuchMainView();
     stage.setTitle("SeeHTTP");
     stage.show();
